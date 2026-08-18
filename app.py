@@ -7,7 +7,7 @@ st.title("🏫 Buscador Rápido: Manual de Convivencia")
 st.markdown("Ingresa el incidente y la IA te dirá el protocolo exacto a seguir.")
 
 # 2. Casilla de API Key
-api_key = st.text_input("Pega tu API Key de Gemini aquí (solo tú la ves):", type="password")
+api_key = st.secrets["GEMINI_API_KEY"]
 
 if api_key:
     # 3. Conexión con el modelo actualizado exacto que pide el sistema
