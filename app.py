@@ -192,4 +192,4 @@ try:
     st.markdown('</div>', unsafe_allow_html=True)
 
 except Exception as e:
-    st.error("⚠️ Error crítico de sistema: Verifique que la API Key esté configurada en los Secrets o que la imagen 'escudo.png' exista en el repositorio.")
+    st.error(f"⚠️ El error técnico exacto que reporta el sistema es: {e}")
