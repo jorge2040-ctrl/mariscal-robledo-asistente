@@ -114,7 +114,7 @@ try:
         "top_k": 64,
         "max_output_tokens": 8192,
     }
-    model = genai.GenerativeModel('gemini-pro', generation_config=generation_config)
+    model = genai.GenerativeModel('gemini-1.5-flash', generation_config=generation_config)
 
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
