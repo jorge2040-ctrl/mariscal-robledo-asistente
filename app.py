@@ -10,7 +10,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# Estilos simples y limpios (Color Vinotinto institucional)
 st.markdown("""
     <style>
     h1, h2, h3, h4 { color: #7B1E38 !important; font-weight: bold; }
@@ -28,25 +27,22 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Encabezado
 st.markdown("<h1>🏫 Sistema Experto de Convivencia</h1>", unsafe_allow_html=True)
 st.markdown("### Institución Educativa Mariscal Robledo")
 st.markdown("---")
 st.info("💡 **Instrucciones:** Describa de forma clara el incidente presenciado. El sistema analizará la base legal del Manual de Convivencia vigente.")
 
 # ==========================================
-# 2. CONEXIÓN A GOOGLE GEMINI
+# 2. CONEXIÓN A GOOGLE GEMINI Y LÓGICA
 # ==========================================
 try:
-    # Captura la llave de la pestaña Secrets
+    # Captura la llave de la pestaña Secrets de Streamlit
     api_key = st.secrets["GEMINI_API_KEY"]
-genai.configure(api_key=api_key)
+    genai.configure(api_key=api_key)
     
-    # Configuración de modelo analítico
     generation_config = {"temperature": 0.1}
     model = genai.GenerativeModel('gemini-1.5-flash', generation_config=generation_config)
 
-    # Base de datos estricta del Manual de Convivencia
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
     Tu tarea EXCLUSIVA es leer el reporte del docente, buscar en tu base de datos la falta exacta, clasificarla y determinar el protocolo y la acción inmediata del docente.
