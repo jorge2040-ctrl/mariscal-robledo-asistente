@@ -41,7 +41,7 @@ try:
     genai.configure(api_key=api_key)
     
     generation_config = {"temperature": 0.1}
-    model = genai.GenerativeModel('gemini-pro', generation_config=generation_config)
+    model = genai.GenerativeModel('gemini-2.5-flash', generation_config=generation_config)
 
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
