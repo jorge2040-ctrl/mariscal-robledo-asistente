@@ -1,10 +1,8 @@
 import streamlit as st
 import google.generativeai as genai
-import base64
-import os
 
 # ==========================================
-# 1. CONFIGURACIÓN DE LA PÁGINA
+# 1. CONFIGURACIÓN BÁSICA DE LA PÁGINA
 # ==========================================
 st.set_page_config(
     page_title="Asistente de Convivencia - Mariscal Robledo", 
@@ -12,110 +10,43 @@ st.set_page_config(
     layout="centered"
 )
 
-# ==========================================
-# 2. FUNCIÓN PARA FONDO INSTITUCIONAL (WATERMARK)
-# ==========================================
-def set_background(image_file):
-    # Verifica si la imagen existe para evitar errores si no se ha subido
-    if os.path.exists(image_file):
-        with open(image_file, "rb") as file:
-            encoded_string = base64.b64encode(file.read()).decode()
-        
-        # CSS avanzado con efecto Glassmorphism (Cristal)
-        css = f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/png;base64,{encoded_string}");
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        }}
-        /* Capa semitransparente blanca para asegurar la lectura del texto */
-        .stApp::before {{
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.88);
-            z-index: -1;
-        }}
-        
-        /* Estilos de las tarjetas (Paneles de cristal) */
-        .glass-panel {{
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            margin-bottom: 20px;
-        }}
-        
-        h1, h2, h3, h4 {{
-            color: #7B1E38 !important; /* Vinotinto del escudo */
-            font-weight: 800;
-            text-align: center;
-        }}
-        
-        .stTextArea textarea {{
-            border-radius: 10px;
-            border: 2px solid #7B1E38;
-            background-color: rgba(255, 255, 255, 0.9);
-        }}
-        
-        .stButton>button {{
-            background-color: #7B1E38;
-            color: white;
-            font-weight: bold;
-            border-radius: 10px;
-            width: 100%;
-            padding: 0.7rem;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(123, 30, 56, 0.4);
-        }}
-        .stButton>button:hover {{
-            background-color: #5A1528;
-            color: white;
-            transform: translateY(-2px);
-        }}
-        </style>
-        """
-        st.markdown(css, unsafe_allow_html=True)
-
-# Llamamos a la función con el nombre de tu imagen
-set_background("escudo.png")
-
-# ==========================================
-# 3. INTERFAZ GRÁFICA (UI)
-# ==========================================
+# Estilos simples y limpios (Color Vinotinto institucional)
 st.markdown("""
-<div class="glass-panel">
-    <h1>🏫 Sistema Experto de Convivencia</h1>
-    <h4>Institución Educativa Mariscal Robledo</h4>
-    <hr style="border-top: 2px solid #7B1E38;">
-    <p style="text-align: justify; font-size: 1.1em; color: #333;">
-        <strong>💡 Instrucciones:</strong> Describa de forma clara y objetiva el incidente presenciado. El sistema analizará la base legal del Manual de Convivencia vigente y determinará la clasificación, su deber inmediato como docente y el protocolo institucional a seguir.
-    </p>
-</div>
+    <style>
+    h1, h2, h3, h4 { color: #7B1E38 !important; font-weight: bold; }
+    .stButton>button {
+        background-color: #7B1E38;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        width: 100%;
+    }
+    .stButton>button:hover {
+        background-color: #5A1528;
+        color: white;
+    }
+    </style>
 """, unsafe_allow_html=True)
 
+# Encabezado
+st.markdown("<h1>🏫 Sistema Experto de Convivencia</h1>", unsafe_allow_html=True)
+st.markdown("### Institución Educativa Mariscal Robledo")
+st.markdown("---")
+st.info("💡 **Instrucciones:** Describa de forma clara el incidente presenciado. El sistema analizará la base legal del Manual de Convivencia vigente.")
+
 # ==========================================
-# 4. LÓGICA DE IA Y BASE DE CONOCIMIENTO ESTRICTA
+# 2. CONEXIÓN A GOOGLE GEMINI
 # ==========================================
 try:
+    # Captura la llave de la pestaña Secrets
     api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
     
-    # Temperatura muy baja (0.1) para que el modelo sea analítico y no invente nada
-    generation_config = {
-        "temperature": 0.1,
-        "top_p": 0.95,
-        "top_k": 64,
-        "max_output_tokens": 8192,
-    }
+    # Configuración de modelo analítico
+    generation_config = {"temperature": 0.1}
     model = genai.GenerativeModel('gemini-1.5-flash', generation_config=generation_config)
 
+    # Base de datos estricta del Manual de Convivencia
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
     Tu tarea EXCLUSIVA es leer el reporte del docente, buscar en tu base de datos la falta exacta, clasificarla y determinar el protocolo y la acción inmediata del docente.
@@ -171,17 +102,12 @@ try:
     **📋 PROTOCOLO INSTITUCIONAL A SEGUIR:** [Enumera los pasos exactos del protocolo correspondiente a la clasificación].
     """
 
-    st.markdown('<div class="glass-panel">', unsafe_allow_html=True)
     st.markdown("#### 📝 Registro del Incidente")
-    incidente = st.text_area(
-        "", 
-        placeholder="Describa los hechos ocurridos con el estudiante (Ej. Fue sorprendido rayando un pupitre o en posesión de un vapeador)...",
-        height=120
-    )
+    incidente = st.text_area("Describa los hechos ocurridos con el estudiante:", height=100)
 
     if st.button("🔍 Analizar Protocolo Legal"):
         if incidente.strip():
-            with st.spinner("⚖️ Consultando el Manual de Convivencia y evaluando el conducto regular..."):
+            with st.spinner("⚖️ Consultando el Manual de Convivencia..."):
                 prompt_completo = f"{prompt_sistema}\n\nIncidente reportado por el docente: {incidente}\n\nRespuesta estructurada:"
                 respuesta = model.generate_content(prompt_completo)
                 
@@ -189,7 +115,6 @@ try:
                 st.markdown(respuesta.text)
         else:
             st.warning("⚠️ Por favor, describa el incidente antes de realizar la consulta.")
-    st.markdown('</div>', unsafe_allow_html=True)
 
 except Exception as e:
     st.error(f"⚠️ El error técnico exacto que reporta el sistema es: {e}")
