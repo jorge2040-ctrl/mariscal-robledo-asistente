@@ -40,7 +40,7 @@ st.info("💡 **Instrucciones:** Describa de forma clara el incidente presenciad
 try:
     # Captura la llave de la pestaña Secrets
     api_key = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=api_key)
+genai.configure(api_key=api_key)
     
     # Configuración de modelo analítico
     generation_config = {"temperature": 0.1}
