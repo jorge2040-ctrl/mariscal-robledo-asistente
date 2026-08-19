@@ -217,10 +217,10 @@ st.markdown("""
 # ==========================================
 st.markdown("""
     <div class="header-compact">
-        <img src="https://raw.githubusercontent.com/TU_USUARIO/TU_REPO/main/escudo.png" class="header-logo" alt="Escudo I.E. Mariscal Robledo">
+        <img src="https://raw.githubusercontent.com/jorge2040-ctrl/mariscal-robledo-asistente/main/escudo.png" class="header-logo" alt="Escudo I.E. Mariscal Robledo">
         <h1>Sistema de Convivencia Escolar</h1>
         <h2>I.E. Mariscal Robledo</h2>
-        <p class="header-author">Desarrollado por: Profe Jorge</p>
+        <p class="header-author">Desarrollado por: El Profe Jorge</p>
     </div>
 """, unsafe_allow_html=True)
 
