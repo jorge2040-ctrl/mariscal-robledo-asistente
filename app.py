@@ -512,7 +512,7 @@ try:
             st.warning("⚠️ Por favor describa el incidente o realice su pregunta.")
     
     st.markdown(
-        f'<div class="model-badge">Modelo: {nombre_modelo.split("/")[-1]} | Consultas: {st.session_state.contador_consultas}</div>',
+        f'<div class="model-badge">Consultas realizadas: {st.session_state.contador_consultas}</div>',
         unsafe_allow_html=True
     )
 
