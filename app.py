@@ -44,49 +44,45 @@ st.markdown("""
     
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 1.5rem 2rem;
+        padding: 0.8rem 1rem; /* Drásticamente más delgado */
         border-radius: 12px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
         text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
     }
     
     .header-logo {
-        width: 85px; /* Tamaño ideal para el escudo */
+        width: 50px; /* Escudo más pequeño para ahorrar espacio vertical */
         height: auto;
-        margin-bottom: 5px;
-        filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+        margin-bottom: 0;
+        filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 2.2rem !important;
+        font-size: 1.6rem !important; /* Texto más ajustado */
         font-weight: 800 !important;
-        margin: 0 !important;
+        margin: 5px 0 0 0 !important;
         line-height: 1.2;
     }
     
     .header-compact h2 {
-        color: #F8D7DA !important; /* Un tono claro que resalta sobre el vinotinto */
-        font-size: 1.5rem !important; /* Letra mucho más grande y visible */
+        color: #F8D7DA !important;
+        font-size: 1.1rem !important; /* Subtítulo compacto */
         font-weight: 600 !important;
-        margin: 0 !important;
-        letter-spacing: 1px;
+        margin: 2px 0 5px 0 !important;
+        letter-spacing: 0.5px;
     }
     
     .header-author {
         color: #E2E8F0 !important;
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important; /* Firma sutil */
         font-style: italic;
-        margin: 5px 0 0 0 !important;
-        opacity: 0.85;
+        margin: 5px auto 0 auto !important;
+        opacity: 0.9;
         border-top: 1px solid rgba(255,255,255,0.2);
-        padding-top: 8px;
-        width: 60%;
+        padding-top: 5px;
+        width: 50%;
     }
     
     .instrucciones {
