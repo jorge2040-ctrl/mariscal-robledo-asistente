@@ -21,6 +21,7 @@ st.markdown("""
     
     .stApp {
         background-color: #FFFFFF;
+        /* RECUERDA CAMBIAR ESTA URL POR EL ENLACE REAL DE TU ESCUDO EN GITHUB */
         background-image: url('https://raw.githubusercontent.com/TU_USUARIO/TU_REPO/main/escudo.png');
         background-repeat: no-repeat;
         background-position: center center;
@@ -66,7 +67,7 @@ st.markdown("""
     .instrucciones {
         background: #F8F9FA;
         border-left: 4px solid #C9A24B;
-        padding: 1rem1.2rem;
+        padding: 1rem 1.2rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
         font-size: 0.9rem;
@@ -121,7 +122,8 @@ st.markdown("""
         border-radius: 8px;
         padding: 1.5rem;
         margin-top: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);}
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
     
     .resultado-box h3 {
         color: #7B1E38 !important;
@@ -204,8 +206,7 @@ st.markdown("""
 # ==========================================
 st.markdown("""
     <div class="instrucciones">
-        <strong>💡 Instrucciones:</strong> Describa brevemente el incidente.
-        El sistema determinará la clasificación y protocolo según el Manual de Convivencia vigente.
+        <strong>💡 Instrucciones:</strong> Describa el incidente para clasificar la falta o realice una pregunta general sobre las normas. El sistema analizará estrictamente el Manual de Convivencia vigente.
     </div>
 """, unsafe_allow_html=True)
 
@@ -232,11 +233,9 @@ try:
     generation_config = {"temperature": 0.1}
     
     modelos_preferidos = [
-        'models/gemini-flash-latest',
+        'models/gemini-2.5-flash',
         'models/gemini-1.5-flash',
         'models/gemini-1.5-flash-latest',
-        'models/gemini-1.5-pro',
-        'models/gemini-2.0-flash-exp',
         'models/gemini-pro'
     ]
     
@@ -270,68 +269,71 @@ try:
     model = modelo_encontrado
 
     # ==========================================
-    # 7. PROMPT DEL SISTEMA
+    # 7. PROMPT DEL SISTEMA (INTELIGENCIA DUAL STRICTA)
     # ==========================================
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
-    Tu tarea EXCLUSIVA es leer el reporte del docente, buscar en tu base de datos la falta exacta, clasificarla y determinar el protocolo y la acción inmediata del docente.
-    REGLA DEORO: NO inventes reglas, no asumas protocolos externos, no resumas. Basa tus respuestas ÚNICA Y LITERALMENTE en el siguiente texto oficial del manual de convivencia:
+    Tu tarea es asistir a los docentes basándote ÚNICA Y EXCLUSIVAMENTE en el texto literal de tu base de datos del Manual de Convivencia.
+    REGLA DE ORO: NO inventes reglas, no asumas protocolos externos, no busques en internet. Si te hacen una pregunta cuya respuesta no está en este texto, debes responder exactamente: "Esa información no se encuentra en el fragmento del manual que tengo disponible."
 
-    === ROL Y ACCIÓN INMEDIATA DEL DOCENTE (CONDUCTO REGULAR) ===
-    - Para PROHIBICIONES y TIPO I: El primer responsable de dar manejo a la situación o conflicto será el docente que acompaña la actividad académica y que presencia la situación, por lo que deberá generar un espacio de diálogo, mediación y negociación y, de ser necesario, hacer la respectiva anotación en el observador del estudiante tipificando la falta.
-    - Para TIPO II y TIPO III: Inmediatamente ocurran loshechos, el docente diligenciará el formato de remisión a orientación escolar, el cual debe ser firmado por el estudiante, y poner loshechos en conocimiento del acudiente/Rectoría.
+    === BASE DE DATOS (MANUAL DE CONVIVENCIA) ===
+    
+    TÉRMINOS Y DEFINICIONES CLAVE:
+    - SIUCE: El Sistema de Información Unificado de Convivencia Escolar apoya la identificación, consulta, registro y seguimiento de casos de acoso, violencia escolar, consumo de Sustancias Psicoactivas, embarazo en adolescencia y vulneración de derechos sexuales y reproductivos.
+    - DEBIDO PROCESO: Garantiza que un proceso sea justo. Nadie podrá ser juzgado sino conforme a leyes preexistentes. Toda persona se presume inocente hasta que no se le declare culpable.
+    - MEDIDAS PEDAGÓGICAS: Son acciones formativas y reflexivas. Incluyen Extrañamiento Temporal y Matrícula Condicional.
+    - RUTAS DE ATENCIÓN: Se dividen en Promoción, Prevención, Atención y Seguimiento.
 
-    === CLASIFICACIÓN DE FALTAS Y PROTOCOLOS ===🔴 1. PROHIBICIONES DISCIPLINARIAS
-    - FALTAS LITERALES: Dejar de asistir a clases/actos sin excusa válida, llegadas tarde (retardos), mentir para justificar inasistencia, permanecer en lugares no permitidos, uso inadecuado de espacios (templo, restaurante, laboratorios, aulas, etc.), interrumpir con juguetes/aparatos/audífonos/celulares, salirse de clase sin permiso, mal comportamiento en salidas pedagógicas, interrumpir con charlas/risas/burlas/juegos, ingresar mascotas sin autorización, negarse a hacer aseo, consumir alimentos/bebidas/chicles en clase o espacios no permitidos, rayar sillas/paredes/prendas, incumplir actividades, copiar tareas, botar basura mal, entrar sin autorización a oficinas/salones, salir al baño/tienda sin permiso, compras por ventanas, ingresar/salir saltando rejas/muros, falta de cuidado y limpieza, uso inadecuado del tablero, desorden en cambio de clase, perder tiempo, gritos/ruidos que interrumpan, faltar con implementos de clase, atentar contra derechos de autor, portar llaves sin permiso, no informar citaciones, desacatar orientaciones, levantar la voz imponiendo ideas, proselitismo político/religioso, usar o esconder útiles ajenos, usar balones fuera de canchas, permanencia en cantinas/bares portando el uniforme.
-    - PROTOCOLO INSTITUCIONAL:1. Seguir conducto regular (1. Docente, 2. Director de grupo, 3. Docente orientador, 4. Rector).
-      2. Aplicar medidas formativas: Reflexión guiada, compromiso escrito, citación a padres, extrañamiento temporal o matrícula condicional.
-      3. (Específico para retardos): Si acumula 3 o más llegadas tarde en el período, realizará actividades de limpieza por una hora, finalizada la jornada.🔴 2. SITUACIONES TIPO I (Conflictos manejados inadecuadamente sin daños a la salud)
-    - FALTAS LITERALES: Arrojar piedras/objetos (sin daño), uso inadecuado de baños/recursos/mobiliario, llamados de atención constantes en actos, celebrar inadecuadamente (huevos, harina), daño a bienes institucionales o de compañeros (irrespeto propiedad ajena), actos de cariño en el aula (besos, abrazos, sentarse en piernas), recolectar dinero/rifas sin permiso, vocabulario vulgar/irrespetuoso para humillar, situaciones excluyentes/discriminatorias, rumores para dañar imagen, insultos/apodos/amenazas/burlas morbosas, desórdenes/saboteo, burlas por raza/orientación sexual/físico/credo, enfrentamientos agresivos verbales esporádicos, incitación a enfrentamientos/faltas, manifestaciones de irrespeto arrojando útiles/textos, mensajes obscenos en paredes/pupitres, desórdenes en la calle con uniforme (disturbios), estigmatización/sobrenombres, hechicería/magia/esoterismo, falsas alarmas (fulminantes, pánico), ingreso a viviendas/negocios en tiempo escolar sin permiso, desórdenes en transporte y restaurante, relaciones que exceden confianza estudiante-docente (besos, tocamientos).
-    - PROTOCOLO INSTITUCIONAL:
-      1. Reunir inmediatamente a las partes involucradas en el conflicto y mediar de manera pedagógica.
-      2. Escuchar descargos por escrito.
-      3. Fijar forma de solución imparcial (reparar daños, restablecer derechos, reconciliación).
-      4. Dejar constancia por escrito en el observador.
-      5. Realizar seguimiento del caso.
+    CONDUCTO REGULAR (ROL DEL DOCENTE):
+    1. Docente que acompaña la clase: El primer responsable de dar manejo a la situación o conflicto será el docente que acompaña la actividad académica, quien deberá generar un espacio de diálogo, mediación y de ser necesario hacer la anotación en el observador tipificando la falta.
+    2. Director de Grupo.
+    3. Docente orientador.
+    4. Rector.
+    - Para situaciones TIPO II y TIPO III: Inmediatamente ocurran los hechos, el docente diligenciará el formato de remisión a orientación escolar firmado por el estudiante, y pondrá los hechos en conocimiento del acudiente/Rectoría.
+
+    CLASIFICACIÓN DE FALTAS Y PROTOCOLOS:
+    
+    🔴 1. PROHIBICIONES DISCIPLINARIAS
+    - FALTAS: Dejar de asistir sin excusa, llegadas tarde (retardos), mentir para justificar inasistencia, permanecer en lugares no permitidos, uso inadecuado de espacios (templo, restaurante, laboratorios, aulas), interrumpir con aparatos/celulares/juguetes, salirse de clase sin permiso, mal comportamiento en salidas pedagógicas, interrumpir con charlas/risas/burlas, ingresar mascotas, negarse a hacer aseo, consumir alimentos/bebidas en clase, rayar sillas/paredes, incumplir actividades, copiar tareas, botar basura mal, entrar sin autorización a oficinas, salir al baño/tienda sin permiso, compras por ventanas, saltar rejas, uso inadecuado del tablero, desorden en cambio de clase, perder tiempo, gritos/ruidos, faltar con implementos, atentar contra derechos de autor, portar llaves sin permiso, no informar citaciones, desacatar orientaciones, levantar la voz, proselitismo político/religioso, esconder útiles ajenos, usar balones fuera de canchas, permanencia en cantinas con uniforme.
+    - PROTOCOLO: 1. Seguir conducto regular. 2. Aplicar medidas formativas (Reflexión guiada, compromiso escrito, citación a padres, extrañamiento temporal o matrícula condicional). 3. (Retardos): Acumular 3 o más llegadas tarde en el período genera actividades de limpieza por una hora, finalizada la jornada.
+
+    🔴 2. SITUACIONES TIPO I (Conflictos manejados inadecuadamente sin daños a la salud)
+    - FALTAS: Arrojar piedras (sin daño), uso inadecuado de baños/recursos, llamados de atención constantes, celebrar inadecuadamente (huevos/harina), daño a bienes/irrespeto propiedad ajena, actos de cariño (besos, abrazos, sentarse en piernas), recolectar dinero/rifas sin permiso, vocabulario vulgar para humillar, situaciones excluyentes/discriminatorias, rumores, insultos/apodos/amenazas/burlas morbosas, desórdenes/saboteo, burlas por raza/orientación sexual/físico/credo, enfrentamientos agresivos verbales esporádicos, incitación a enfrentamientos, arrojar útiles/textos, mensajes obscenos, desórdenes en la calle con uniforme, estigmatización/sobrenombres, hechicería/magia/esoterismo, falsas alarmas (pánico/quemar basura), ingreso a viviendas/negocios en tiempo escolar sin permiso, desórdenes en transporte/restaurante, relaciones que exceden confianza estudiante-docente.
+    - PROTOCOLO: 1. Reunir inmediatamente a las partes involucradas y mediar de manera pedagógica. 2. Escuchar descargos por escrito. 3. Fijar forma de solución imparcial (reparar daños, restablecer derechos, reconciliación). 4. Dejar constancia por escrito en el observador. 5. Realizar seguimiento del caso.
 
     🔴 3. SITUACIONES TIPO II (Agresión escolar, bullying, ciberacoso y daños sin incapacidad)
-    - FALTAS LITERALES: Reincidir en Tipo I, agresión escolar/Bullying y ciberacoso que no sean delito, Bullying por orientación sexual/identidad de género, agresiones físicas esporádicas sin daño, peleas/lesiones sin incapacidad, atropellar/empujar intencionalmente, juegos bruscos que causen lesiones, uso de elementos peligrosos, tatuajes/perforaciones dentro de la Institución, trifulcas/escándalos dentro o fuera, mensajes sexuales ofensivos en espacios públicos, complicidad para ocultar hechos/mentir, porte/consumo o inducir a energizantes/medicamentos sin receta, salida del establecimiento sin autorización (fuga), consumo de estupefacientes/SPA (drogas, alcohol, vapeadores, etc.) al interior o alrededores, presentarse en estado de embriaguez o bajo SPA.
-    - PROTOCOLO INSTITUCIONAL:
-      1. Informar inmediatamente a acudientes de los involucrados (constancia escrita).
-      2. Si hay daño, garantizar atención inmediata en salud física/mental.
-      3. Remitir a autoridades administrativas (Comisaría, ICBF) si se requiere restablecimiento de derechos.
-      4. Proteger a los involucrados.
-      5. Remitir al Comité de Convivencia para determinar acciones restaurativas y/o pedagógicas (Matrícula Condicional o Extrañamiento temporal).
-      6. Reportar obligatoriamente en SIUCE.
+    - FALTAS: Reincidir en Tipo I, agresión escolar/Bullying y ciberacoso que no sean delito, Bullying por orientación sexual/identidad de género, agresiones físicas esporádicas sin daño, peleas/lesiones sin incapacidad, atropellar/empujar intencionalmente, juegos bruscos con lesiones, uso de elementos peligrosos, tatuajes/perforaciones en la Institución, trifulcas/escándalos, mensajes sexuales ofensivos en espacios públicos, complicidad para ocultar hechos/mentir, porte/consumo o inducir a energizantes/medicamentos sin receta, salida del establecimiento sin autorización (fuga), consumo de estupefacientes/SPA (drogas, alcohol, vapeadores) al interior o alrededores, presentarse en estado de embriaguez o bajo SPA.
+    - PROTOCOLO: 1. Informar inmediatamente a acudientes de los involucrados (constancia escrita). 2. Garantizar atención en salud física/mental si hay daño. 3. Remitir a autoridades (Comisaría/ICBF) si requiere restablecimiento de derechos. 4. Proteger a los involucrados. 5. Remitir al Comité de Convivencia para acciones restaurativas (Matrícula Condicional o Extrañamiento temporal). 6. Reportar obligatoriamente en SIUCE.
 
     🔴 4. SITUACIONES TIPO III (Presuntos delitos)
-    - FALTAS LITERALES: Reincidencia en Tipo II, Homicidio, Hurto/robo comprobado, Acoso Sexual, Violación, Extorsión, Relaciones sexo-genitales dentro de la institución (exhibicionismo/masturbación), corrupción de menores, instrumentalización,porte de explosivos, pandillas/bandas, expendio/distribución de SPA, porte de dispositivos para consumo de SPA (vapeadores, pipas, cigarrillo, candelas), inducir al consumo/venta de SPA, comprar SPA, amenaza de muerte, atentado contra la vida/dignidad, apoyo en bandas de terceros para solucionar conflictos, acoso que revista delito, complicidad en tocamientos sexuales, exhibición sexual por medios, delitos informáticos, agresión física con daño a la salud considerable, porte de pólvora/químicos, secuestro/sicariato/terrorismo, maltrato animal, protestas violentas, grabación no autorizada, explotación sexual, uso de armas (fuego, cortopunzantes, traumáticas, navajas, bisturí), ciberacoso reiterado por homofobia/transfobia, comisión de fraude académico (copia en exámenes, plagio, alteración de notas), falsificar firmas, adulteración de planillas, soborno, suplantación, pornografía infantil (posesión, distribución), calumnia al buen nombre.
-    - PROTOCOLO INSTITUCIONAL:
-      1. Informar inmediatamente a los acudientes (constancia escrita).
-      2. Garantizar atención en salud si hay daño físico/mental.
-      3. El presidente del Comité informará INMEDIATAMENTE a la Policía Nacional.
-      4. Citar al Comité de Convivencia Escolar para tomar medidas propias e iniciar ProcesoReeducativo.
-      5. Reportar en SIUCE.
-      6. Sugerir Cambio de Institución por parte del Consejo Directivo (si aplica).
+    - FALTAS: Reincidencia en Tipo II, Homicidio, Hurto/robo comprobado, Acoso Sexual, Violación, Extorsión, Relaciones sexo-genitales dentro de la institución, corrupción de menores, instrumentalización, porte de explosivos, pandillas/bandas, expendio/distribución de SPA, porte de dispositivos para SPA (vapeadores, pipas, cigarrillo), inducir consumo/venta de SPA, comprar SPA, amenaza de muerte, atentado contra la vida/dignidad, apoyo en bandas para solucionar conflictos, acoso delito, complicidad en tocamientos sexuales, exhibición sexual por medios, delitos informáticos, agresión física con daño a la salud considerable, porte de pólvora/químicos, secuestro/sicariato/terrorismo, maltrato animal, protestas violentas, grabación no autorizada, explotación sexual, uso de armas (fuego, cortopunzantes, traumáticas, bisturí), ciberacoso reiterado por homofobia/transfobia, fraude académico (copia, plagio, alteración de notas), falsificar firmas, adulteración de planillas, soborno, suplantación, pornografía infantil, calumnia al buen nombre.
+    - PROTOCOLO: 1. Informar inmediatamente a acudientes (constancia escrita). 2. Garantizar atención en salud si hay daño físico/mental. 3. El presidente del Comité informará INMEDIATAMENTE a la Policía Nacional. 4. Citar al Comité de Convivencia Escolar para iniciar Proceso Reeducativo. 5. Reportar en SIUCE. 6. Sugerir Cambio de Institución por parte del Consejo Directivo (si aplica).
 
-    === FORMATO DE RESPUESTA ===
-    CLASIFICACION: [Tipo de falta]
-    
-    ACCION INMEDIATA DEL DOCENTE: [Qué debe hacer]
-    
-    PROTOCOLO INSTITUCIONAL: [Pasos a seguir]
+    === INSTRUCCIONES DE PROCESAMIENTO ===
+    Analiza la consulta del usuario y determina si es un REPORTE DE INCIDENTE o una PREGUNTA GENERAL.
+
+    CASO A - SI ES UN REPORTE DE INCIDENTE:
+    Usa ESTRICTAMENTE este formato sin añadir información extra:
+    CLASIFICACION: [Indica el Tipo de falta exacto]
+    ACCION INMEDIATA DEL DOCENTE: [Indica el paso a paso del conducto regular]
+    PROTOCOLO INSTITUCIONAL: [Enumera los pasos exactos del protocolo]
+
+    CASO B - SI ES UNA PREGUNTA GENERAL (Ej. ¿Qué es el SIUCE?, ¿Cuáles son las faltas tipo 2?):
+    Responde de manera amable, directa y como un asistente virtual experto, basándote EXCLUSIVAMENTE en el texto de la base de datos provista. Usa formato Markdown (negritas, viñetas) para hacer la lectura clara, sin usar el formato estricto del "Caso A".
     """
 
     # ==========================================
     # 8. FORMULARIO
     # ==========================================
+    st.markdown("#### 📝 Registro de Incidente o Consulta")
     incidente = st.text_area(
-        "📝 Describa el incidente:",
+        "",
         height=120,
-        placeholder="Ejemplo: Estudiante llegó 20 minutos tarde sin justificación..."
+        placeholder="Ejemplo 1 (Incidente): Estudiante llegó 20 minutos tarde.\nEjemplo 2 (Pregunta): ¿Qué situaciones se reportan en el SIUCE?",
+        label_visibility="collapsed"
     )
     
-    analizar_btn = st.button("🔍 Analizar Protocolo")
+    analizar_btn = st.button("🔍 Analizar / Consultar")
 
     # ==========================================
     # 9. PROCESAMIENTO Y RESULTADOS
@@ -341,38 +343,39 @@ try:
             tiempo_restante = 10 - int(time.time() - st.session_state.ultimo_uso)
             st.warning(f"⏳ Espere {tiempo_restante} segundos antes de realizar otra consulta.")
         elif incidente.strip():
-            with st.spinner("⚖️ Analizando..."):
+            with st.spinner("⚖️ Analizando en el Manual de Convivencia..."):
                 try:
-                    prompt_completo = f"{prompt_sistema}\n\nIncidente: {incidente}\n\nRespuesta:"
+                    prompt_completo = f"{prompt_sistema}\n\nConsulta del usuario: {incidente}\n\nRespuesta:"
                     respuesta = model.generate_content(prompt_completo)
                 
                     if respuesta and respuesta.text:
                         st.success("✅ Análisis completado")
                         texto = respuesta.text.strip()
-                        texto = texto.replace("CLASIFICACION:", "**🔴 CLASIFICACIÓN:**")
-                        texto = texto.replace("ACCION INMEDIATA DEL DOCENTE:", "\n\n**👨‍🏫 ACCIÓN INMEDIATA:**")
-                        texto = texto.replace("PROTOCOLO INSTITUCIONAL:", "\n\n**📋 PROTOCOLO INSTITUCIONAL:**")
                         
-                        #✅ TODO EN UN SOLO st.markdown() para evitar cuadro vacío
+                        # Formateo si la respuesta es del CASO A
+                        if "CLASIFICACION:" in texto or "ACCION INMEDIATA DEL DOCENTE:" in texto:
+                            texto = texto.replace("CLASIFICACION:", "**🔴 CLASIFICACIÓN:**")
+                            texto = texto.replace("ACCION INMEDIATA DEL DOCENTE:", "\n\n**👨‍🏫 ACCIÓN INMEDIATA:**")
+                            texto = texto.replace("PROTOCOLO INSTITUCIONAL:", "\n\n**📋 PROTOCOLO INSTITUCIONAL:**")
+                        
                         st.markdown(f"""<div class="resultado-box">
-                            <h3>Resultado del Análisis</h3>
+                            <h3>Resultado de la Consulta</h3>
                             {texto}
                         </div>""", unsafe_allow_html=True)
                         
                         st.session_state.ultimo_uso = time.time()
                         st.session_state.contador_consultas += 1
                     else:
-                        st.warning("⚠️ No se pudo generar respuesta. Intente reformular el incidente.")
+                        st.warning("⚠️ No se pudo generar respuesta. Intente reformular la consulta.")
                         
                 except Exception as e:
                     if "429" in str(e) or "quota" in str(e).lower():
                         st.error("⚠️ Límite de cuota alcanzado. Espere unos minutos.")
                     else:
-                        st.error("⚠️ Error al procesar la respuesta.")
+                        st.error(f"⚠️ Error al procesar la respuesta: {e}")
         else:
-            st.warning("⚠️ Por favor describa el incidente.")
+            st.warning("⚠️ Por favor describa el incidente o realice su pregunta.")
     
-    # Badge del modelo (discreto, al final)
     st.markdown(
         f'<div class="model-badge">Modelo: {nombre_modelo.split("/")[-1]} | Consultas: {st.session_state.contador_consultas}</div>',
         unsafe_allow_html=True
