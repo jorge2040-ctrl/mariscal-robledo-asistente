@@ -43,7 +43,7 @@ try:
     generation_config = {"temperature": 0.1}
     
     # ✅ USAR MODELO CON PUNTOS (no guiones) según tu lista
-    model = genai.GenerativeModel('models/gemini-1.5-flash-lite', generation_config=generation_config)
+    model = genai.GenerativeModel('models/gemini-1.5-flash-lite-preview', generation_config=generation_config)
 
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
