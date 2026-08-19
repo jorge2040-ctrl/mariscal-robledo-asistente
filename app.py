@@ -34,7 +34,7 @@ st.markdown("""
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(255, 255, 255, 0.92);
+        background: rgba(255, 255, 255, 0.80); /* 👈 AQUI LE BAJAMOS LA OPACIDAD AL BLANCO (antes 0.92) */
         z-index: 0;
         pointer-events: none;
     }
@@ -51,7 +51,7 @@ st.markdown("""
     /* 2. BANNER VINOTINTO AJUSTADO */
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 1.2rem 1rem 0.6rem 1rem; /* 👈 Más espacio arriba para que el escudo NO se corte */
+        padding: 1.2rem 1rem 0.6rem 1rem; 
         border-radius: 12px;
         margin-bottom: 0.8rem; 
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
@@ -59,9 +59,9 @@ st.markdown("""
     }
     
     .header-logo {
-        width: 55px; /* Un poco más grande para lucir mejor */
+        width: 55px; 
         height: auto;
-        margin-bottom: -5px !important; /* 👈 Esto lo baja y lo sienta casi sobre la palabra Convivencia */
+        margin-bottom: -5px !important; 
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
         position: relative;
         z-index: 3;
