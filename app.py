@@ -1,41 +1,366 @@
 import streamlit as st
 import google.generativeai as genai
-from datetime import datetime, timedelta
 import time
 
 # ==========================================
 # 1. CONFIGURACIÓN BÁSICA DE LA PÁGINA
 # ==========================================
 st.set_page_config(
-    page_title="Asistente de Convivencia - Mariscal Robledo", 
+    page_title="Sistema de Convivencia - Mariscal Robledo", 
     page_icon="🏫",
-    layout="centered"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
+# ==========================================
+# 2. CSS PERSONALIZADO - DISEÑO ACADÉMICO PROFESIONAL
+# ==========================================
 st.markdown("""
     <style>
-    h1, h2, h3, h4 { color: #7B1E38 !important; font-weight: bold; }
-    .stButton>button {
-        background-color: #7B1E38;
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        width: 100%;
+    /* Importar fuentes profesionales */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+    
+    /* Variables de color institucional */
+    :root {
+        --primary: #7B1E38;
+        --primary-dark: #5A1528;
+        --primary-light: #9B2E48;
+        --accent: #C9A24B;
+        --dark: #0F172A;
+        --slate: #1E293B;
+        --slate-light: #334155;
+        --text-light: #F8FAFC;
+        --border: #475569;
     }
-    .stButton>button:hover {
-        background-color: #5A1528;
-        color: white;
+    
+    /* Fondo general con textura sutil */
+    .stApp {
+        background: linear-gradient(135deg, #0B0E14 0%, #1E293B 100%);
+        font-family: 'Inter', -apple-system, sans-serif;
+    }
+    
+    /* Header principal */
+    .main-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        padding: 2.5rem 3rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(123, 30, 56, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .main-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.4;
+    }
+    
+    .main-header h1 {
+        color: #FFFFFF !important;
+        font-size: 2.5rem !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 1;
+    }
+    
+    .main-header p {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 1.1rem !important;
+        margin-top: 0.5rem !important;
+        font-weight: 400 !important;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .institution-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 1.2rem;
+        border-radius: 24px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #FFF;
+        margin-top: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Tarjeta de instrucciones mejorada */
+    .info-card {
+        background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+        border-left: 4px solid var(--accent);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        border: 1px solid var(--border);
+    }
+    
+    .info-card h3 {
+        color: var(--accent) !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 0.8rem !important;
+        font-weight: 600 !important;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .info-card p {
+        color: var(--text-light) !important;
+        line-height: 1.6 !important;
+        margin: 0 !important;
+    }
+    
+    /* Sección de registro con diseño mejorado */
+    .registro-section {
+        background: linear-gradient(135deg, var(--slate) 0%, var(--dark) 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        color: #F8FAFC !important;
+        font-size: 1.4rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 1.5rem !important;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border);
+    }
+    
+    /* Textarea mejorado */
+    .stTextArea textarea {
+        background: #0F172A !important;
+        border: 2px solid var(--border) !important;
+        border-radius: 12px !important;
+        color: #F8FAFC !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
+        font-family: 'Inter', sans-serif !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stTextArea textarea:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 3px rgba(123, 30, 56, 0.2) !important;
+        outline: none !important;
+    }
+    
+    .stTextArea label {
+        color: var(--text-light) !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Botón principal rediseñado */
+    .stButton > button {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
+        padding: 0.9rem 2.5rem !important;
+        border-radius: 12px !important;
+        border: none !important;
+        width: 100% !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 16px rgba(123, 30, 56, 0.4) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%) !important;
+        box-shadow: 0 6px 24px rgba(123, 30, 56, 0.6) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(0) !important;
+    }
+    
+    /* Tarjeta de resultados */
+    .resultado-card {
+        background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        margin-top: 2rem;
+    }
+    
+    .resultado-card h3 {
+        color: var(--accent) !important;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    /* Alertas y mensajes mejorados */
+    .stSuccess, .stWarning, .stError, .stInfo {
+        border-radius: 12px !important;
+        border: none !important;
+        padding: 1rem 1.5rem !important;
+        font-weight: 500 !important;
+    }
+    
+    .stSuccess {
+        background: linear-gradient(135deg, #065f46 0%, #064e3b 100%) !important;
+        color: #d1fae5 !important;
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, #92400e 0%, #78350f 100%) !important;
+        color: #fef3c7 !important;
+    }
+    
+    .stError {
+        background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%) !important;
+        color: #fecaca !important;
+    }
+    
+    /* Sidebar mejorado */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, var(--slate) 0%, var(--dark) 100%) !important;
+        border-right: 1px solid var(--border) !important;
+    }
+    
+    section[data-testid="stSidebar"] > div {
+        padding-top: 2rem !important;
+    }
+    
+    /* Texto del modelo activo */
+    .model-info {
+        background: rgba(201, 162, 75, 0.1);
+        border: 1px solid var(--accent);
+        color: var(--accent) !important;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-family: 'IBM Plex Sans', monospace;
+        text-align: center;
+        margin: 1rem 0;
+    }
+    
+    /* Spinner personalizado */
+    .stSpinner > div {
+        border-top-color: var(--primary) !important;
+    }
+    
+    /* Markdown en resultados */
+    .resultado-card p, .resultado-card ul, .resultado-card ol {
+        color: var(--text-light) !important;
+        line-height: 1.8 !important;
+    }
+    
+    .resultado-card strong {
+        color: var(--accent) !important;
+    }
+    
+    /* Scrollbar personalizado */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--dark);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--slate-light);
+        border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--border);
+    }
+    
+    /* Ocultar elementos de Streamlit */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* Animaciones */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .main-header, .info-card, .registro-section {
+        animation: fadeIn 0.5s ease-out;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1>🏫 Sistema Experto de Convivencia</h1>", unsafe_allow_html=True)
-st.markdown("### Institución Educativa Mariscal Robledo")
-st.markdown("---")
-st.info("💡 **Instrucciones:** Describa de forma clara el incidente presenciado. El sistema analizará la base legal del Manual de Convivencia vigente.")
+# ==========================================
+# 3. HEADER PRINCIPAL
+# ==========================================
+st.markdown("""
+    <div class="main-header">
+        <h1>🏫 Sistema Experto de Convivencia Escolar</h1>
+        <p>Institución Educativa Mariscal Robledo - Medellín, Colombia</p>
+        <div class="institution-badge">Manual de Convivencia 2024</div>
+    </div>
+""", unsafe_allow_html=True)
 
 # ==========================================
-# 2. CONTROL DE TASA DE USO (Rate Limiting)
+# 4. SIDEBAR CON INFORMACIÓN
+# ==========================================
+with st.sidebar:
+    st.markdown("### 📚 Acerca del Sistema")
+    st.markdown("""
+    Este sistema experto analiza incidentes disciplinarios basándose en el **Manual de Convivencia** oficial de la Institución.
+    
+    **Categorías de Faltas:**
+    - 🟡 Prohibiciones Disciplinarias
+    - 🟠 Situaciones Tipo I
+    - 🟠 Situaciones Tipo II  
+    - 🔴 Situaciones Tipo III
+    
+    ---
+    
+    **Conducto Regular:**
+    1. Docente que presencia
+    2. Director de grupo
+    3. Orientador escolar
+    4. Rector(a)
+    
+    ---
+    
+    **Soporte Técnico:**
+    📧 sistemas@mariscalrobledo.edu.co
+    """)
+    
+    st.markdown("---")
+    st.markdown("**Versión 2.0** | Enero 2025")
+
+# ==========================================
+# 5. TARJETA DE INSTRUCCIONES
+# ==========================================
+st.markdown("""
+    <div class="info-card">
+        <h3>💡 Instrucciones de Uso</h3>
+        <p>Describa de forma clara y detallada el incidente presenciado. El sistema analizará la situación conforme a la normativa legal del Manual de Convivencia vigente y proporcionará la clasificación, acción inmediata y protocolo institucional correspondiente.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# ==========================================
+# 6. CONTROL DE TASA DE USO
 # ==========================================
 if 'ultimo_uso' not in st.session_state:
     st.session_state.ultimo_uso = None
@@ -43,17 +368,15 @@ if 'contador_consultas' not in st.session_state:
     st.session_state.contador_consultas = 0
 
 def puede_hacer_consulta():
-    """Limita a una consulta cada 10 segundos"""
     if st.session_state.ultimo_uso is None:
         return True
-    
     tiempo_transcurrido = time.time() - st.session_state.ultimo_uso
     if tiempo_transcurrido < 10:
         return False
     return True
 
 # ==========================================
-# 3. CONEXIÓN A GOOGLE GEMINI Y LÓGICA
+# 7. CONEXIÓN A GOOGLE GEMINI
 # ==========================================
 try:
     api_key = st.secrets["GEMINI_API_KEY"]
@@ -61,7 +384,6 @@ try:
     
     generation_config = {"temperature": 0.1}
     
-    # Priorizar modelos rápidos
     modelos_preferidos = [
         'models/gemini-flash-latest',
         'models/gemini-1.5-flash',
@@ -99,7 +421,13 @@ try:
         st.stop()
     
     model = modelo_encontrado
-    st.caption(f"🤖 Modelo: {nombre_modelo} | Consultas realizadas: {st.session_state.contador_consultas}")
+    
+    # Mostrar info del modelo de forma elegante
+    st.markdown(f"""
+        <div class="model-info">
+            🤖 Modelo: {nombre_modelo.split('/')[-1]} | Consultas: {st.session_state.contador_consultas}
+        </div>
+    """, unsafe_allow_html=True)
 
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
@@ -157,10 +485,28 @@ try:
     PROTOCOLO INSTITUCIONAL: [Pasos a seguir]
     """
 
-    st.markdown("#### 📝 Registro del Incidente")
-    incidente = st.text_area("Describa los hechos ocurridos con el estudiante:", height=100)
+    # ==========================================
+    # 8. FORMULARIO DE REGISTRO
+    # ==========================================
+    st.markdown('<div class="registro-section">', unsafe_allow_html=True)
+    st.markdown('<p class="section-title">📝 Registro del Incidente</p>', unsafe_allow_html=True)
+    
+    incidente = st.text_area(
+        "Describa los hechos ocurridos con el estudiante:",
+        height=150,
+        placeholder="Ejemplo: El estudiante llegó 15 minutos tarde a la clase de matemáticas sin justificación médica ni autorización previa..."
+    )
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        analizar_btn = st.button("🔍 Analizar Protocolo Legal")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    if st.button("🔍 Analizar Protocolo Legal"):
+    # ==========================================
+    # 9. PROCESAMIENTO Y RESULTADOS
+    # ==========================================
+    if analizar_btn:
         if not puede_hacer_consulta():
             tiempo_restante = 10 - int(time.time() - st.session_state.ultimo_uso)
             st.warning(f"⏳ Por favor espere {tiempo_restante} segundos antes de realizar otra consulta.")
@@ -171,31 +517,49 @@ try:
                     respuesta = model.generate_content(prompt_completo)
                     
                     if respuesta and respuesta.text:
-                        st.success("✅ Análisis completado.")
+                        st.success("✅ Análisis completado con base en la normativa vigente.")
                         
+                        # Formatear respuesta
                         texto = respuesta.text.strip()
                         texto = texto.replace("CLASIFICACION:", "🔴 **CLASIFICACIÓN:**")
                         texto = texto.replace("ACCION INMEDIATA DEL DOCENTE:", "\n\n👩‍🏫 **ACCIÓN INMEDIATA DEL DOCENTE:**")
-                        texto = texto.replace("PROTOCOLO INSTITUCIONAL:", "\n\n📋 **PROTOCOLO INSTITUCIONAL:**")
+                        texto = texto.replace("PROTOCOLO INSTITUCIONAL:", "\n\n📋 **PROTOCOLO INSTITUCIONAL A SEGUIR:**")
                         
+                        # Mostrar en tarjeta de resultados
+                        st.markdown('<div class="resultado-card">', unsafe_allow_html=True)
+                        st.markdown("### Resultado del Análisis")
                         st.markdown(texto)
+                        st.markdown('</div>', unsafe_allow_html=True)
                         
                         # Actualizar contadores
                         st.session_state.ultimo_uso = time.time()
                         st.session_state.contador_consultas += 1
                     else:
-                        st.warning("⚠️ No se pudo generar respuesta.")
+                        st.warning("⚠️ No se pudo generar respuesta. Intente reformular el incidente.")
                         
                 except Exception as e:
                     if "429" in str(e) or "quota" in str(e).lower():
                         st.error("⚠️ **Límite de cuota alcanzado**")
-                        st.info("Por favor espere unos minutos o contacte al administrador para actualizar el plan de la API.")
+                        st.info("Por favor espere unos minutos o contacte al administrador del sistema para actualizar el plan de la API.")
                     else:
                         st.error("⚠️ Error al procesar la respuesta.")
-                        st.caption(f"Detalle: {str(e)[:200]}")
+                        with st.expander("Ver detalles técnicos"):
+                            st.code(str(e)[:300])
         else:
-            st.warning("⚠️ Por favor, describa el incidente.")
+            st.warning("⚠️ Por favor, describa el incidente antes de realizar la consulta.")
 
 except Exception as e:
-    st.error(f"⚠️ Error de configuración del sistema.")
-    st.caption(f"Detalle: {e}")
+    st.error("⚠️ Error de configuración del sistema.")
+    st.caption(f"Detalle técnico: {e}")
+
+# ==========================================
+# 10. FOOTER
+# ==========================================
+st.markdown("---")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.markdown("**📧 Contacto:** sistemas@mariscalrobledo.edu.co")
+with col2:
+    st.markdown("**🏫 Sede:** Medellín, Antioquia")
+with col3:
+    st.markdown("**📅 Versión:** 2.0 - Enero 2025")
