@@ -197,7 +197,7 @@ st.markdown("""
 st.markdown("""
     <div class="header-compact">
         <h1>🏫 Sistema de Convivencia Escolar</h1>
-        <p>I.E. Mariscal Robledo — Medellín</p>
+        <p>I.E. Mariscal Robledo</p>
     </div>
 """, unsafe_allow_html=True)
 
