@@ -15,8 +15,6 @@ st.set_page_config(
 # ==========================================
 # 2. CSS PERSONALIZADO
 # ==========================================
-# 2. CSS PERSONALIZADO
-# ==========================================
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -50,36 +48,40 @@ st.markdown("""
         max-width: 800px !important;
     }
     
-    /* 2. BANNER VINOTINTO ULTRA COMPACTO */
+    /* 2. BANNER VINOTINTO AJUSTADO */
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 0.5rem 1rem; /* Relleno superior e inferior casi nulo */
+        padding: 1.2rem 1rem 0.6rem 1rem; /* 👈 Más espacio arriba para que el escudo NO se corte */
         border-radius: 12px;
-        margin-bottom: 0.8rem; /* Menos espacio hacia las instrucciones */
+        margin-bottom: 0.8rem; 
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
         text-align: center;
     }
     
     .header-logo {
-        width: 45px; /* Escudo más pequeño */
+        width: 55px; /* Un poco más grande para lucir mejor */
         height: auto;
-        margin-bottom: 0px !important;
+        margin-bottom: -5px !important; /* 👈 Esto lo baja y lo sienta casi sobre la palabra Convivencia */
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
+        position: relative;
+        z-index: 3;
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 1.4rem !important; /* Letra un poco más ajustada */
+        font-size: 1.4rem !important; 
         font-weight: 800 !important;
-        margin: 2px 0 0 0 !important;
+        margin: 0 !important;
         line-height: 1.2;
+        position: relative;
+        z-index: 2;
     }
     
     .header-compact h2 {
         color: #F8D7DA !important;
         font-size: 1rem !important;
         font-weight: 600 !important;
-        margin: 0 !important;
+        margin: 2px 0 5px 0 !important;
         letter-spacing: 0.5px;
     }
     
@@ -90,7 +92,7 @@ st.markdown("""
         margin: 2px auto 0 auto !important;
         opacity: 0.9;
         border-top: 1px solid rgba(255,255,255,0.2);
-        padding-top: 2px;
+        padding-top: 4px;
         width: 50%;
     }
     
@@ -98,7 +100,7 @@ st.markdown("""
     .instrucciones {
         background: #F8F9FA;
         border-left: 4px solid #C9A24B;
-        padding: 0.6rem 1rem; /* Menos relleno */
+        padding: 0.6rem 1rem; 
         border-radius: 8px;
         margin-bottom: 1rem;
         font-size: 0.85rem;
@@ -106,7 +108,7 @@ st.markdown("""
         line-height: 1.4;
     }
     
-    /* RESTO DE ESTILOS (CAJA DE TEXTO Y BOTÓN) */
+    /* RESTO DE ESTILOS */
     .stTextArea label {
         color: #2D3748 !important;
         font-weight: 600 !important;
