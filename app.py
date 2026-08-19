@@ -484,7 +484,7 @@ try:
                     respuesta = model.generate_content(prompt_completo)
                 
                     if respuesta and respuesta.text:
-                        st.success("✅ Análisis completado")
+                        st.success("✅ Análisis completo")
                         texto = respuesta.text.strip()
                         
                         # Formateo si la respuesta es del CASO A
