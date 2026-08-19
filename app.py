@@ -232,11 +232,12 @@ try:
     
     generation_config = {"temperature": 0.1}
     
+    # CORRECCIÓN VITAL: Se exige gemini-3.6-flash según el último error de Google
     modelos_preferidos = [
-        'models/gemini-2.5-flash',
-        'models/gemini-1.5-flash',
-        'models/gemini-1.5-flash-latest',
-        'models/gemini-pro'
+        'models/gemini-3.6-flash',
+        'models/gemini-flash-latest',
+        'models/gemini-pro',
+        'models/gemini-1.5-flash'
     ]
     
     modelo_encontrado = None
@@ -269,7 +270,7 @@ try:
     model = modelo_encontrado
 
     # ==========================================
-    # 7. PROMPT DEL SISTEMA (INTELIGENCIA DUAL STRICTA)
+    # 7. PROMPT DEL SISTEMA (INTELIGENCIA DUAL ESTRICTA)
     # ==========================================
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
