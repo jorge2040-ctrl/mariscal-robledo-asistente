@@ -49,19 +49,44 @@ st.markdown("""
         margin-bottom: 1.5rem;
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .header-logo {
+        width: 85px; /* Tamaño ideal para el escudo */
+        height: auto;
+        margin-bottom: 5px;
+        filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 1.8rem !important;
-        font-weight: 700 !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
         margin: 0 !important;
+        line-height: 1.2;
     }
     
-    .header-compact p {
-        color: rgba(255, 255, 255, 0.9) !important;
+    .header-compact h2 {
+        color: #F8D7DA !important; /* Un tono claro que resalta sobre el vinotinto */
+        font-size: 1.5rem !important; /* Letra mucho más grande y visible */
+        font-weight: 600 !important;
+        margin: 0 !important;
+        letter-spacing: 1px;
+    }
+    
+    .header-author {
+        color: #E2E8F0 !important;
         font-size: 0.95rem !important;
-        margin: 0.3rem 0 0 0 !important;
+        font-style: italic;
+        margin: 5px 0 0 0 !important;
+        opacity: 0.85;
+        border-top: 1px solid rgba(255,255,255,0.2);
+        padding-top: 8px;
+        width: 60%;
     }
     
     .instrucciones {
