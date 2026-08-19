@@ -7,7 +7,7 @@ import time
 # ==========================================
 st.set_page_config(
     page_title="Sistema de Convivencia - Mariscal Robledo", 
-    page_icon="🏫",
+    page_icon="https://raw.githubusercontent.com/jorge2040-ctrl/mariscal-robledo-asistente/main/escudo.png",
     layout="centered",
     initial_sidebar_state="collapsed"
 )
