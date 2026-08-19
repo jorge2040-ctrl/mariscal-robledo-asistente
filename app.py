@@ -42,8 +42,28 @@ try:
     
     generation_config = {"temperature": 0.1}
     
-    # ✅ USAR MODELO CON PUNTOS (no guiones) según tu lista
-    model = genai.GenerativeModel('models/gemini-1.5-pro', generation_config=generation_config)
+    # ✅ DETECTAR AUTOMÁTICAMENTE EL PRIMER MODELO DISPONIBLE
+    modelo_encontrado = None
+    nombre_modelo = None
+    
+    for model_info in genai.list_models():
+        if 'generateContent' in model_info.supported_generation_methods:
+            nombre_modelo = model_info.name
+            try:
+                modelo_encontrado = genai.GenerativeModel(nombre_modelo, generation_config=generation_config)
+                # Hacer prueba real
+                test = modelo_encontrado.generate_content("Hola")
+                if test:
+                    st.caption(f"🤖 Modelo activo: {nombre_modelo}")
+                    break
+            except:
+                continue
+    
+    if modelo_encontrado is None:
+        st.error("❌ No se encontró ningún modelo compatible. Verifica tu API Key de Google Gemini.")
+        st.stop()
+    
+    model = modelo_encontrado
 
     prompt_sistema = """
     Eres el Sistema Experto Legal y Disciplinario de la Institución Educativa Mariscal Robledo.
@@ -106,7 +126,7 @@ try:
     if st.button("🔍 Analizar Protocolo Legal"):
         if incidente.strip():
             with st.spinner("⚖️ Consultando el Manual de Convivencia..."):
-                prompt_completo = f"{prompt_sistema}\n\nIncidente reportado por el docente: {incidente}\n\nRespuesta estructurada:"
+                prompt_completo = f"{prompt_sistema}\n\nIncidente reportado por el docente: {incidente}\n\nRespuesta estructuada:"
                 respuesta = model.generate_content(prompt_completo)
                 
                 st.success("✅ Análisis completado con base en la normativa vigente.")
@@ -115,4 +135,5 @@ try:
             st.warning("⚠️ Por favor, describa el incidente antes de realizar la consulta.")
 
 except Exception as e:
-    st.error(f"⚠️ El error técnico exacto que reporta el sistema es: {e}")
+    st.error(f"⚠️ Error de configuración del sistema.")
+    st.caption(f"Detalle técnico: {e}")
