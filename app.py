@@ -15,8 +15,9 @@ st.set_page_config(
 # ==========================================
 # 2. CSS PERSONALIZADO
 # ==========================================
+# 2. CSS PERSONALIZADO
+# ==========================================
 st.markdown("""
-    st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
@@ -207,7 +208,6 @@ st.markdown("""
     ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
     </style>
-""", unsafe_allow_html=True)
 """, unsafe_allow_html=True)
 
 # ==========================================
