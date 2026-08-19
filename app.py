@@ -243,7 +243,7 @@ def puede_hacer_consulta():
     return (time.time() - st.session_state.ultimo_uso) >= 10
 
 # ==========================================
-# 6. CONEXIÓN SEGURA Y RÁPIDA A GOOGLE GEMINI
+# 6. CONEXIÓN SEGURA Y DIRECTA A GOOGLE GEMINI
 # ==========================================
 try:
     api_key = st.secrets["GEMINI_API_KEY"]
@@ -251,22 +251,9 @@ try:
     
     generation_config = {"temperature": 0.1}
     
-    # Extraer la lista REAL de modelos permitidos para esta llave (Elimina la lentitud)
-    modelos_disponibles = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-    
-    # Elegir el mejor modelo rápido que realmente exista
-    nombre_modelo = None
-    preferencias = ['models/gemini-1.5-flash', 'models/gemini-2.5-flash', 'models/gemini-flash-latest']
-    
-    for pref in preferencias:
-        if pref in modelos_disponibles:
-            nombre_modelo = pref
-            break
-            
-    if not nombre_modelo:
-        # Fallback al primer modelo útil si no encuentra los preferidos
-        nombre_modelo = next((m for m in modelos_disponibles if 'gemma' not in m.lower()), modelos_disponibles[0])
-        
+    # Hemos eliminado el ciclo automático que causaba el error 404.
+    # Forzamos EXCLUSIVAMENTE el modelo más reciente exigido por Google:
+    nombre_modelo = 'gemini-3.6-flash'
     model = genai.GenerativeModel(nombre_modelo, generation_config=generation_config)
 
     # ==========================================
