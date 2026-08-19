@@ -48,10 +48,10 @@ st.markdown("""
         max-width: 800px !important;
     }
     
-    /* 2. BANNER VINOTINTO SÚPER COMPACTO */
+    /* 2. BANNER VINOTINTO CORREGIDO */
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 0.4rem 1rem 0.4rem 1rem; /* Reducimos drásticamente el espacio arriba y abajo */
+        padding: 1.2rem 1rem 0.4rem 1rem; /* 👈 Le devolvemos el espacio arriba (1.2rem) para que NO se corte el escudo */
         border-radius: 12px;
         margin-bottom: 0.8rem; 
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
@@ -59,24 +59,28 @@ st.markdown("""
     }
     
     .header-logo {
-        width: 45px; /* Escudo un poco más pequeño para caber en la franja */
+        width: 50px; 
         height: auto;
         margin-top: 0px !important;
-        margin-bottom: 2px !important; /* Espacio mínimo debajo del escudo */
+        margin-bottom: -10px !important; /* 👈 Este margen negativo "jala" el título hacia el escudo */
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
+        position: relative;
+        z-index: 3;
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 1.3rem !important; /* Título un poco más compacto */
+        font-size: 1.3rem !important; 
         font-weight: 800 !important;
         margin: 0 !important;
         line-height: 1.1;
+        position: relative;
+        z-index: 2;
     }
     
     .header-compact h2 {
         color: #F8D7DA !important;
-        font-size: 0.9rem !important; /* Subtítulo ajustado */
+        font-size: 0.9rem !important; 
         font-weight: 600 !important;
         margin: 2px 0 4px 0 !important;
         letter-spacing: 0.5px;
@@ -84,16 +88,16 @@ st.markdown("""
     
     .header-author {
         color: #E2E8F0 !important;
-        font-size: 0.7rem !important; /* Letra de la firma más pequeña */
+        font-size: 0.7rem !important; 
         font-style: italic;
         margin: 0 auto 0 auto !important;
         opacity: 0.9;
         border-top: 1px solid rgba(255,255,255,0.2);
         padding-top: 3px;
-        width: 40%; /* Línea divisoria un poco más corta */
+        width: 40%; 
     }
     
-    /* 3. INSTRUCCIONES TAMBIÉN MÁS DELGADAS */
+    /* 3. INSTRUCCIONES MÁS DELGADAS */
     .instrucciones {
         background: #F8F9FA;
         border-left: 4px solid #C9A24B;
@@ -105,7 +109,7 @@ st.markdown("""
         line-height: 1.4;
     }
     
-    /* RESTO DE ESTILOS (CAJA DE TEXTO Y BOTÓN) */
+    /* RESTO DE ESTILOS */
     .stTextArea label {
         color: #2D3748 !important;
         font-weight: 600 !important;
