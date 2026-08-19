@@ -41,15 +41,17 @@ st.markdown("""
     
     .main { position: relative; z-index: 1; }
     
+    /* 1. MUEVE TODA LA APP HACIA ARRIBA */
     .block-container {
         padding-top: 1.5rem !important; 
         padding-bottom: 1rem !important;
         max-width: 800px !important;
     }
     
+    /* 2. BANNER VINOTINTO SÚPER COMPACTO */
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 1.2rem 1rem 0.6rem 1rem; 
+        padding: 0.4rem 1rem 0.4rem 1rem; /* Reducimos drásticamente el espacio arriba y abajo */
         border-radius: 12px;
         margin-bottom: 0.8rem; 
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
@@ -57,47 +59,45 @@ st.markdown("""
     }
     
     .header-logo {
-        width: 55px; 
+        width: 45px; /* Escudo un poco más pequeño para caber en la franja */
         height: auto;
-        margin-bottom: -5px !important; 
+        margin-top: 0px !important;
+        margin-bottom: 2px !important; /* Espacio mínimo debajo del escudo */
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
-        position: relative;
-        z-index: 3;
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 1.4rem !important; 
+        font-size: 1.3rem !important; /* Título un poco más compacto */
         font-weight: 800 !important;
         margin: 0 !important;
-        line-height: 1.2;
-        position: relative;
-        z-index: 2;
+        line-height: 1.1;
     }
     
     .header-compact h2 {
         color: #F8D7DA !important;
-        font-size: 1rem !important;
+        font-size: 0.9rem !important; /* Subtítulo ajustado */
         font-weight: 600 !important;
-        margin: 2px 0 5px 0 !important;
+        margin: 2px 0 4px 0 !important;
         letter-spacing: 0.5px;
     }
     
     .header-author {
         color: #E2E8F0 !important;
-        font-size: 0.75rem !important;
+        font-size: 0.7rem !important; /* Letra de la firma más pequeña */
         font-style: italic;
-        margin: 2px auto 0 auto !important;
+        margin: 0 auto 0 auto !important;
         opacity: 0.9;
         border-top: 1px solid rgba(255,255,255,0.2);
-        padding-top: 4px;
-        width: 50%;
+        padding-top: 3px;
+        width: 40%; /* Línea divisoria un poco más corta */
     }
     
+    /* 3. INSTRUCCIONES TAMBIÉN MÁS DELGADAS */
     .instrucciones {
         background: #F8F9FA;
         border-left: 4px solid #C9A24B;
-        padding: 0.6rem 1rem; 
+        padding: 0.5rem 1rem; 
         border-radius: 8px;
         margin-bottom: 1rem;
         font-size: 0.85rem;
@@ -105,6 +105,7 @@ st.markdown("""
         line-height: 1.4;
     }
     
+    /* RESTO DE ESTILOS (CAJA DE TEXTO Y BOTÓN) */
     .stTextArea label {
         color: #2D3748 !important;
         font-weight: 600 !important;
@@ -133,7 +134,7 @@ st.markdown("""
         color: white !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-        padding: 0.7rem 2rem !important;
+        padding: 0.6rem 2rem !important;
         border-radius: 8px !important;
         border: none !important;
         width: 100% !important;
@@ -151,36 +152,28 @@ st.markdown("""
         background: #FFFFFF;
         border: 2px solid #E2E8F0;
         border-radius: 8px;
-        padding: 1.5rem;
-        margin-top: 1.5rem;
+        padding: 1.2rem;
+        margin-top: 1.2rem;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     .resultado-box h3 {
         color: #7B1E38 !important;
-        font-size: 1.2rem !important;
-        margin-bottom: 1rem !important;
-        padding-bottom: 0.7rem !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 0.8rem !important;
+        padding-bottom: 0.5rem !important;
         border-bottom: 2px solid #E2E8F0 !important;
     }
     
     .resultado-box p, .resultado-box ul, .resultado-box ol {
         color: #2D3748 !important;
-        line-height: 1.7 !important;
-        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        font-size: 0.9rem !important;
     }
     
     .resultado-box strong { color: #7B1E38 !important; }
     
-    .stSuccess {
-        background-color: #D1FAE5 !important;
-        color: #065F46 !important;
-        border: 1px solid #A7F3D0 !important;
-        border-radius: 8px !important;
-        padding: 0.5rem !important;
-    }
-    
-    .stWarning, .stError {
+    .stSuccess, .stWarning, .stError {
         border-radius: 8px !important;
         padding: 0.5rem !important;
     }
