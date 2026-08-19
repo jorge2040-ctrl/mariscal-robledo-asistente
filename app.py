@@ -16,13 +16,13 @@ st.set_page_config(
 # 2. CSS PERSONALIZADO
 # ==========================================
 st.markdown("""
+    st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
     .stApp {
         background-color: #FFFFFF;
-        /* RECUERDA CAMBIAR ESTA URL POR EL ENLACE REAL DE TU ESCUDO EN GITHUB */
-        background-image: url('https://raw.githubusercontent.com/TU_USUARIO/TU_REPO/main/escudo.png');
+        background-image: url('https://raw.githubusercontent.com/jorge2040-ctrl/mariscal-robledo-asistente/main/escudo.png');
         background-repeat: no-repeat;
         background-position: center center;
         background-size: 400px;
@@ -42,64 +42,75 @@ st.markdown("""
     
     .main { position: relative; z-index: 1; }
     
+    /* 1. MUEVE TODA LA APP HACIA ARRIBA */
+    .block-container {
+        padding-top: 1.5rem !important; 
+        padding-bottom: 1rem !important;
+        max-width: 800px !important;
+    }
+    
+    /* 2. BANNER VINOTINTO ULTRA COMPACTO */
     .header-compact {
         background: linear-gradient(135deg, #7B1E38 0%, #5A1528 100%);
-        padding: 0.8rem 1rem; /* Drásticamente más delgado */
+        padding: 0.5rem 1rem; /* Relleno superior e inferior casi nulo */
         border-radius: 12px;
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem; /* Menos espacio hacia las instrucciones */
         box-shadow: 0 4px 12px rgba(123, 30, 56, 0.2);
         text-align: center;
     }
     
     .header-logo {
-        width: 50px; /* Escudo más pequeño para ahorrar espacio vertical */
+        width: 45px; /* Escudo más pequeño */
         height: auto;
-        margin-bottom: 0;
+        margin-bottom: 0px !important;
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3));
     }
     
     .header-compact h1 {
         color: #FFFFFF !important;
-        font-size: 1.6rem !important; /* Texto más ajustado */
+        font-size: 1.4rem !important; /* Letra un poco más ajustada */
         font-weight: 800 !important;
-        margin: 5px 0 0 0 !important;
+        margin: 2px 0 0 0 !important;
         line-height: 1.2;
     }
     
     .header-compact h2 {
         color: #F8D7DA !important;
-        font-size: 1.1rem !important; /* Subtítulo compacto */
+        font-size: 1rem !important;
         font-weight: 600 !important;
-        margin: 2px 0 5px 0 !important;
+        margin: 0 !important;
         letter-spacing: 0.5px;
     }
     
     .header-author {
         color: #E2E8F0 !important;
-        font-size: 0.85rem !important; /* Firma sutil */
+        font-size: 0.75rem !important;
         font-style: italic;
-        margin: 5px auto 0 auto !important;
+        margin: 2px auto 0 auto !important;
         opacity: 0.9;
         border-top: 1px solid rgba(255,255,255,0.2);
-        padding-top: 5px;
+        padding-top: 2px;
         width: 50%;
     }
     
+    /* 3. INSTRUCCIONES MÁS DELGADAS */
     .instrucciones {
         background: #F8F9FA;
         border-left: 4px solid #C9A24B;
-        padding: 1rem 1.2rem;
+        padding: 0.6rem 1rem; /* Menos relleno */
         border-radius: 8px;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
         color: #2D3748;
-        line-height: 1.5;
+        line-height: 1.4;
     }
     
+    /* RESTO DE ESTILOS (CAJA DE TEXTO Y BOTÓN) */
     .stTextArea label {
         color: #2D3748 !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
+        margin-bottom: 0px !important;
     }
     
     .stTextArea textarea {
@@ -108,7 +119,7 @@ st.markdown("""
         border-radius: 8px !important;
         color: #2D3748 !important;
         font-size: 0.95rem !important;
-        padding: 0.8rem !important;
+        padding: 0.6rem !important;
         font-family: 'Inter', sans-serif !important;
         transition: all 0.2s ease !important;
     }
@@ -129,7 +140,7 @@ st.markdown("""
         width: 100% !important;
         transition: all 0.2s ease !important;
         box-shadow: 0 2px 8px rgba(123, 30, 56, 0.3) !important;
-        margin-top: 0.5rem !important;
+        margin-top: 0.2rem !important;
     }
     
     .stButton > button:hover {
@@ -167,20 +178,12 @@ st.markdown("""
         color: #065F46 !important;
         border: 1px solid #A7F3D0 !important;
         border-radius: 8px !important;
+        padding: 0.5rem !important;
     }
     
-    .stWarning {
-        background-color: #FEF3C7 !important;
-        color: #92400E !important;
-        border: 1px solid #FDE68A !important;
+    .stWarning, .stError {
         border-radius: 8px !important;
-    }
-    
-    .stError {
-        background-color: #FEE2E2 !important;
-        color: #991B1B !important;
-        border: 1px solid #FECACA !important;
-        border-radius: 8px !important;
+        padding: 0.5rem !important;
     }
     
     .model-badge {
@@ -199,17 +202,12 @@ st.markdown("""
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
     
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-        max-width: 800px !important;
-    }
-    
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #F1F5F9; }
     ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
     </style>
+""", unsafe_allow_html=True)
 """, unsafe_allow_html=True)
 
 # ==========================================
