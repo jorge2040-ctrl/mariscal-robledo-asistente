@@ -463,7 +463,7 @@ try:
     st.markdown("#### 📝 Registro de Incidente o Consulta")
     incidente = st.text_area(
         "",
-        height=120,
+        height=80,  # 👈 Aquí reducimos la altura. Antes estaba en 120.
         placeholder="Ejemplo 1 (Incidente): Estudiante llegó 20 minutos tarde.\nEjemplo 2 (Pregunta): ¿Qué es el Consejo Directivo?",
         label_visibility="collapsed"
     )
